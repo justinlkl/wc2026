@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+
+# Data & models (large / cached)
+data/results.csv
+data/shootouts.csv
+data/statsbomb/
+data/api_football/
+models/*.json
+models/*.joblib
+*.parquet
+
+# Secrets
+.env
+.env.local
+
+# IDE / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Outputs
+outputs/
+predictions/

@@ -1,0 +1,33 @@
+name: WC 2026 — Auto Update Predictions
+
+on:
+  schedule:
+    # Every 3 hours
+    - cron: "0 */3 * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -e . --quiet
+
+      - name: Run prediction update (once)
+        run: python -m wc2026.wc2026_scheduler --once
+
+      - name: Commit updated predictions
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add outputs/wc2026_predictions.csv data/fixtures.csv data/github_wc2026/
+          git diff --staged --quiet || git commit -m "chore: auto-update WC 2026 predictions $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push
+
