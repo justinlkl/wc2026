@@ -149,8 +149,19 @@ def build_match_xg_table() -> pd.DataFrame:
         for match in matches:
             match_id = match["match_id"]
             date = pd.Timestamp(match["match_date"])
-            home = canonical_team(match["home_team"]["home_team_name"])
-            away = canonical_team(match["away_team"]["away_team_name"])
+            home_raw = match["home_team"]["home_team_name"]
+            away_raw = match["away_team"]["away_team_name"]
+            # Defensive: skip if StatsBomb changed format and field is not a string
+            if not isinstance(home_raw, str) or not isinstance(away_raw, str):
+                logger.warning(
+                    "StatsBomb match %d: non-string team name skipped (home=%r away=%r)",
+                    match_id,
+                    home_raw,
+                    away_raw,
+                )
+                continue
+            home = canonical_team(home_raw)
+            away = canonical_team(away_raw)
 
             events_path = root / "data" / "events" / f"{match_id}.json"
             if not events_path.exists():

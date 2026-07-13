@@ -95,9 +95,10 @@ def load_wc2026_match_xg_long() -> pd.DataFrame:
     df[date_col] = _to_timestamp(df[date_col])
     df = df.dropna(subset=[date_col])
 
-    # Canonicalize team names
-    df[home_col] = df[home_col].astype(str).map(canonical_team)
-    df[away_col] = df[away_col].astype(str).map(canonical_team)
+    # Canonicalize team names — drop rows where either team fails (e.g. NaN/TBD matches)
+    df[home_col] = df[home_col].astype(str).str.strip().map(canonical_team)
+    df[away_col] = df[away_col].astype(str).str.strip().map(canonical_team)
+    df = df.dropna(subset=[home_col, away_col])
 
     df[home_xg_for_col] = pd.to_numeric(df[home_xg_for_col], errors="coerce")
     df[away_xg_for_col] = pd.to_numeric(df[away_xg_for_col], errors="coerce")
