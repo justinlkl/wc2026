@@ -188,7 +188,7 @@ def _lookup_inwc_form(
         **{f"win{w}": None for w in IN_TOURNAMENT_FORM_WINDOWS},
         **{f"gd{w}": None for w in IN_TOURNAMENT_FORM_WINDOWS},
     }
-if form_df.empty or "team" not in form_df.columns or "date" not in form_df.columns:
+    if form_df.empty or "team" not in form_df.columns or "date" not in form_df.columns:
         return defaults
     subset = form_df[(form_df["team"] == team) & (form_df["date"] < as_of)]
     if subset.empty:
