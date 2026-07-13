@@ -19,6 +19,9 @@ jobs:
       - name: Install dependencies
         run: pip install -e . --quiet
 
+      - name: Train models
+        run: python -m wc2026.cli train
+
       - name: Run prediction update (once)
         run: python -m wc2026.wc2026_scheduler --once
 
@@ -30,4 +33,3 @@ jobs:
           git add outputs/wc2026_predictions.csv data/fixtures.csv data/github_wc2026/
           git diff --staged --quiet || git commit -m "chore: auto-update WC 2026 predictions $(date -u '+%Y-%m-%d %H:%M UTC')"
           git push
-
