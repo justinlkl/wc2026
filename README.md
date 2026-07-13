@@ -23,7 +23,7 @@ international_results (2006+)
     ┌───────────────────────────────────────────┐
     │  XGBClassifier (home / draw / away)       │
     │  XGBRegressor × 2 (home goals, away goals)│
-    │  Poisson Score Matrix (scoreline probs)    │
+    │  Poisson Score Matrix (scoreline probs)   │
     └───────────────────────────────────────────┘
          │
          ▼
@@ -59,18 +59,52 @@ python -m wc2026.cli summary
 | `summary` | Display tournament standings and model predictions |
 | `update` | Update fixtures from GitHub dataset |
 
-### Predict Options
+## Running Predictions
+
+### Local one-off prediction
 
 ```bash
-# Use GitHub fixtures (default, no API key needed)
-python -m wc2026.cli predict --source github
-
-# Use local CSV fixtures
-python -m wc2026.cli predict --source csv --from-csv data/fixtures.csv
-
-# Verbose output with group stage and stakes analysis
-python -m wc2026.cli predict --source github --verbose
+python -m wc2026.cli predict --source github --force
 ```
+
+This re-downloads all upstream data (`international_results`, GitHub fixtures, xG), rebuilds `data/fixtures.csv`, retrains models with the fresh xG features, and runs inference.
+
+### Understanding the output
+
+```
+>>> Predicted outcome: France (41.3%)
+>>> Predicted outcome: Argentina (51.5%)
+ fixture_id       date       round      home_team  away_team  p_home_win  p_draw  p_away_win  exp_home_goals  exp_away_goals      score1      score2      score3
+        101  2026-07-14  Semi-finals     France      Spain       0.4129   0.2684     0.3187            1.35            1.88  1-1 (10.9%)  1-2 (10.0%)  0-1 (8.8%)
+        102  2026-07-15  Semi-finals    England  Argentina    0.2620   0.2230     0.5151            1.20            1.45  1-1 (12.8%)  0-1 (11.2%)  1-2 (9.0%)
+```
+
+**Columns:**
+| Column | Description |
+|--------|-------------|
+| `p_home_win` / `p_draw` / `p_away_win` | Outcome probabilities from XGBClassifier |
+| `exp_home_goals` / `exp_away_goals` | Expected goals from separate XGBRegressor per team |
+| `score1–3` | Top 3 most likely exact scorelines (Poisson matrix, normalised) |
+
+### Why expected goals ≠ win probability
+
+France has a *higher* win probability (41.3%) than Spain (31.9%) yet a *lower* expected goals (1.35 vs 1.88). This is normal — they are separate models:
+
+- **Win probability** = how often this team wins across all possible outcomes (including draws and penalty shootouts in aggregate)
+- **Expected goals** = the average number of goals this team scores per match
+
+France can win more often by scoring efficiently in tight 1-0 wins and grinding out 0-0 draws that go to penalties. Spain can outshoot France and average more goals overall while losing more of those close games. The most likely scoreline for France vs Spain is 1-1 (10.9%) — a draw — which contributes to France's win probability coming from lower-scoring wins rather than shootouts.
+
+### Workflow / CI (GitHub Actions)
+
+The `.github/workflows/wc2026_update.yml` runs daily at 06:00 UTC and:
+
+1. Refreshes `international_results` and `matches_detailed.csv`
+2. Retrains models with fresh xG features (`include_xg=True`)
+3. Re-generates `outputs/wc2026_predictions.csv`
+4. Commits updated data, model artifacts, and predictions
+
+To trigger manually: go to the Actions tab → "WC 2026 — Auto Update Predictions" → "Run workflow".
 
 ## Features
 
@@ -132,22 +166,6 @@ python -m wc2026.cli predict --source github --verbose
 4. `home_gd10` - Home team 10-game goal difference
 5. `away_win10` - Away team 10-game win rate
 
-## Score Matrix
-
-The model uses a **Poisson distribution** to generate probability matrices for specific scorelines:
-
-```
-Spain vs Belgium (Semi-finals)
-Most Likely Scores:
-  1. Spain 1-1 Belgium (12.4%)
-  2. Spain 0-1 Belgium (9.2%)
-  3. Spain 1-0 Belgium (8.9%)
-```
-
-The matrix accounts for:
-- Expected goals for each team
-- Weak correlation between goals (high-scoring games tend to have goals for both sides)
-- Normalization to ensure probabilities sum to 100%
 
 ## Project Layout
 
@@ -189,37 +207,30 @@ wc2026/
 
 ## Understanding the Predictions
 
-### Why Expected Goals ≠ Match Winner
+The model produces two independent outputs for each match:
 
-The expected goals (xG) from the goal regressors show the *average* number of goals expected for each team. However, the outcome predictions come from a **separate XGBoost classifier** that learns from ALL features simultaneously:
+1. **Outcome probabilities** from an XGBClassifier (home win / draw / away win) — learns from all features simultaneously: Elo ratings, form, H2H, and xG rolling averages
+2. **Expected goals** from separate XGBRegressors — directly predicts goals scored per team, then converts to a Poisson scoreline probability matrix
 
-- Belgium's higher xG (1.44 vs 1.41) means they're expected to score slightly more goals on average
-- Spain wins in the model (40.5% vs 32.8%) because:
-  - Spain has superior Elo ratings (attack/defense split)
-  - Better recent form in high-stakes matches
-  - Historical dominance in head-to-head matchups
-  - Stronger defensive record (0 goals conceded in group stage)
-
-The classifier considers many factors beyond raw expected goals, making it more nuanced than just comparing xG values.
+These are trained separately, so a team can have higher win probability but lower expected goals, and both can be simultaneously correct. See the explanation in *Running Predictions → Understanding the output*.
 
 ### Probabilities Don't Sum to Win%
 
-The probability of "Spain winning" (40.5%) doesn't mean Spain scores more goals than Belgium. It means:
+The probability of "France winning" (41.3%) doesn't mean France scores more goals than Spain. It means:
 
-- **P(Spain wins)** = probability of any scoreline where Spain has more goals (e.g., 1-0, 2-0, 2-1, etc.)
+- **P(Fx wins)** = probability of any scoreline where France has more goals (e.g., 1-0, 2-0, 2-1, etc.)
 - **P(Draw)** = probability of equal goals (0-0, 1-1, 2-2, etc.)
-- **P(Belgium wins)** = probability of any scoreline where Belgium has more goals
+- **P(Spain wins)** = probability of any scoreline where Spain has more goals
 
-The most likely scoreline (1-1 at 12.4%) is actually a draw!
+The most likely scoreline (1-1 at 10.9%) is actually a draw — France's win probability comes from winning the marginal distribution. This does not conflict with Spain having higher expected goals.
 
 ## Extending
 
 - Add more xG sources (xgclient, TheStatsAPI) in `xg_features.py`
 - Switch goal models to `reg:poisson` for Poisson goal distributions
-- Parse knockout/group rounds from fixtures for `is_knockout` features
 - Expand `team_names.py` aliases as you discover mapping gaps
 - Calibrate probabilities using isotonic regression
-- Add Elo prediction accuracy weights
+- Adjust the daily cron in `.github/workflows/wc2026_update.yml` if match data refreshes at different times
 
 ## API-Football (Optional)
 

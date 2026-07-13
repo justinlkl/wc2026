@@ -20,12 +20,16 @@ from pathlib import Path
 import pandas as pd
 
 from wc2026.config import DATA_DIR, OUTPUTS_DIR
-from wc2026.data_loading import download_results
+from wc2026.data_loading import download_results, load_results
+from wc2026.features import build_modeling_dataset
 from wc2026.github_loader import (
     GITHUB_CACHE_DIR,
     GITHUB_DATASET_MATCHES_CSV,
+    GITHUB_DATASET_MATCHES_DETAILED_CSV,
     _download_if_needed,
+    refresh_matches_detailed_csv,
 )
+from wc2026.model_train import train_models
 from wc2026.predict_world_cup import predict_fixtures
 
 logging.basicConfig(
@@ -36,6 +40,17 @@ logging.basicConfig(
 logger = logging.getLogger("wc2026.scheduler")
 
 POLL_INTERVAL_SECONDS = 3 * 60 * 60  # 3 hours
+
+
+_STAGE_LABELS = {
+    1: "Group Stage",
+    2: "Round of 16",
+    3: "Quarter-finals",
+    4: "Semi-finals",
+    5: "Semi-finals",      # upstream labels these as 3rd place but schedule shows semi-finals
+    6: "Final",
+    7: "TBD",
+}
 
 
 def _rebuild_fixtures_csv_from_github_matches(
@@ -130,11 +145,13 @@ def _rebuild_fixtures_csv_from_github_matches(
     df = df[df["home_team"] != ""]
     df = df[df["away_team"] != ""]
 
+    df["stage_id_int"] = df[stage_id_col].astype(int)
+    df["round"] = df["stage_id_int"].map(_STAGE_LABELS).fillna("TBD")
     fixtures_out = pd.DataFrame(
         {
             "fixture_id": df[match_id_col],
             "date": df[date_col].dt.date.astype(str),
-            "round": df[stage_id_col].astype(int).astype(str),
+            "round": df["round"],
             "home_team": df["home_team"],
             "away_team": df["away_team"],
         }
@@ -167,7 +184,15 @@ def run_update(*, force_download: bool, fixtures_min_stage_id: int) -> None:
         fixtures_path=DATA_DIR / "fixtures.csv",
     )
 
-    # 3) Rerun inference to produce updated predictions
+    # 3) Refresh matches_detailed.csv (xG source) daily and retrain
+    #    so new rows update Elo + xG features before inference
+    refresh_matches_detailed_csv(force_download=force_download, dest_path=DATA_DIR / "matches_detailed.csv")
+
+    results = load_results()
+    matches = build_modeling_dataset(results, include_xg=True)
+    train_models(matches)
+
+    # 4) Run inference to produce updated predictions
     out_path = OUTPUTS_DIR / "wc2026_predictions.csv"
     predict_fixtures(
         fixtures_csv=DATA_DIR / "fixtures.csv",

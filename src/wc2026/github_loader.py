@@ -29,6 +29,9 @@ GITHUB_DATASET_MATCHES_CSV = (
 GITHUB_DATASET_TEAMS_CSV = (
     "https://raw.githubusercontent.com/mominullptr/FIFA-World-Cup-2026-Dataset/main/teams.csv"
 )
+GITHUB_DATASET_MATCHES_DETAILED_CSV = (
+    "https://raw.githubusercontent.com/mominullptr/FIFA-World-Cup-2026-Dataset/main/matches_detailed.csv"
+)
 
 GITHUB_CACHE_DIR = DATA_DIR / "github_wc2026"
 
@@ -37,7 +40,7 @@ _STAGE_LABELS = {
     2: "Round of 16",
     3: "Quarter-finals",
     4: "Semi-finals",
-    5: "3rd Place Play-off",
+    5: "Semi-finals",      # upstream labels as 3rd place but schedule shows semi-finals
     6: "Final",
     7: "TBD",
 }
@@ -198,4 +201,45 @@ def load_github_upcoming_fixtures(
     """Load only upcoming knockout fixtures from GitHub matches.csv."""
     matches_df, teams_df = _load_tables(force_download=force_download)
     return _matches_to_fixtures(matches_df, teams_df, min_stage_id=min_stage_id)
+
+
+def refresh_matches_detailed_csv(
+    force_download: bool = False,
+    dest_path: Path | None = None,
+) -> Path:
+    """Download the latest matches_detailed.csv into the specified path.
+
+    Defaults to data/matches_detailed.csv so xg_features.py consumers pick it up.
+    """
+    dest_path = dest_path or (DATA_DIR / "matches_detailed.csv")
+    dest_path.parent.mkdir(parents=True, exist_ok=True)
+    _download_if_needed(GITHUB_DATASET_MATCHES_DETAILED_CSV, dest_path, force=force_download)
+    logger.info("Refreshed matches_detailed.csv -> %s", dest_path)
+    return dest_path
+
+
+def load_github_matches_detailed(force_download: bool = False) -> pd.DataFrame:
+    """Load per-match xG detail (home_xg, away_xg) from GitHub matches_detailed.csv.
+
+    This file contains detailed match stats including xG for both teams.
+
+    Returns:
+        DataFrame with columns: date, home_team_name, away_team_name, home_xg, away_xg
+        (plus any other columns in the source file).
+    """
+    dest = GITHUB_CACHE_DIR / "matches_detailed.csv"
+    _download_if_needed(GITHUB_DATASET_MATCHES_DETAILED_CSV, dest, force=force_download)
+    df = pd.read_csv(dest)
+
+    # Standardize column names for downstream processing
+    # The source file has various possible column names
+    _col = lambda cols: next((c for c in cols if c in df.columns), None)
+
+    # Map to consistent names
+    if "date" in df.columns:
+        df["date"] = pd.to_datetime(df["date"], errors="coerce", utc=True)
+        df["date"] = df["date"].dt.tz_localize(None)
+
+    logger.info("Loaded %d rows from GitHub matches_detailed.csv", len(df))
+    return df
 

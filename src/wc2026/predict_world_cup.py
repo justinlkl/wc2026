@@ -96,13 +96,15 @@ def predict_fixtures(
     output_path: Path | None = None,
     print_top_outcome: bool = False,
     source: Literal["csv", "kaggle", "github"] = "github",
+    results_source: Literal["github", "historical"] = "github",
 
     kaggle_path: Path | None = None,
     force_kaggle_download: bool = False,
 ) -> pd.DataFrame:
     """Score all WC 2026 fixtures and write predictions CSV."""
 
-    if source == "github":
+    if results_source == "github" or source == "github":
+        # Use combined results (historical + completed WC 2026 matches)
         results = _combined_results_with_github()
     else:
         results = _historical_backbone()
