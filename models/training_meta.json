@@ -1,0 +1,161 @@
+{
+  "feature_cols": [
+    "neutral",
+    "tournament_weight",
+    "is_world_cup",
+    "home_att_elo",
+    "home_def_elo",
+    "away_att_elo",
+    "away_def_elo",
+    "att_vs_def_home",
+    "att_vs_def_away",
+    "home_win5",
+    "home_gd5",
+    "home_win10",
+    "home_gd10",
+    "home_rest_days",
+    "home_gf5",
+    "home_ga5",
+    "away_win5",
+    "away_gd5",
+    "away_win10",
+    "away_gd10",
+    "away_rest_days",
+    "away_gf5",
+    "away_ga5",
+    "home_inwc_win3",
+    "home_inwc_gd3",
+    "home_inwc_win5",
+    "home_inwc_gd5",
+    "away_inwc_win3",
+    "away_inwc_gd3",
+    "away_inwc_win5",
+    "away_inwc_gd5",
+    "h2h_n",
+    "h2h_home_winrate",
+    "h2h_home_gd",
+    "home_xg_for_avg5",
+    "home_xg_against_avg5",
+    "home_xg_for_avg10",
+    "home_xg_against_avg10",
+    "away_xg_for_avg5",
+    "away_xg_against_avg5",
+    "away_xg_for_avg10",
+    "away_xg_against_avg10",
+    "home_xg_diff_5",
+    "away_xg_diff_5"
+  ],
+  "result_labels": [
+    "home_win",
+    "draw",
+    "away_win"
+  ],
+  "metrics": [
+    {
+      "split": "train",
+      "accuracy": 0.6341658341658342,
+      "log_loss": 0.7966329455375671,
+      "baseline_log_loss": 1.04073208906087,
+      "home_mae": 0.9573228359222412,
+      "away_mae": 0.7453488111495972
+    },
+    {
+      "split": "val",
+      "accuracy": 0.5809917355371901,
+      "log_loss": 0.9147314429283142,
+      "baseline_log_loss": 1.0503204955502945,
+      "home_mae": 1.0772747993469238,
+      "away_mae": 0.8686115145683289
+    },
+    {
+      "split": "test",
+      "accuracy": 0.5761334473909324,
+      "log_loss": 0.9262492656707764,
+      "baseline_log_loss": 1.0560397877601593,
+      "home_mae": 1.075469970703125,
+      "away_mae": 0.8853758573532104
+    }
+  ],
+  "top_features": [
+    {
+      "feature": "att_vs_def_away",
+      "gain": 10.030365943908691
+    },
+    {
+      "feature": "att_vs_def_home",
+      "gain": 9.672070503234863
+    },
+    {
+      "feature": "away_gd10",
+      "gain": 5.1806960105896
+    },
+    {
+      "feature": "home_gd10",
+      "gain": 4.614619731903076
+    },
+    {
+      "feature": "home_gd5",
+      "gain": 3.721348762512207
+    },
+    {
+      "feature": "neutral",
+      "gain": 3.6991641521453857
+    },
+    {
+      "feature": "away_win10",
+      "gain": 3.500209093093872
+    },
+    {
+      "feature": "away_att_elo",
+      "gain": 3.354037046432495
+    },
+    {
+      "feature": "home_ga5",
+      "gain": 3.037473201751709
+    },
+    {
+      "feature": "home_def_elo",
+      "gain": 2.932368278503418
+    },
+    {
+      "feature": "away_gf5",
+      "gain": 2.925283670425415
+    },
+    {
+      "feature": "home_win10",
+      "gain": 2.910778522491455
+    },
+    {
+      "feature": "away_def_elo",
+      "gain": 2.842977523803711
+    },
+    {
+      "feature": "away_ga5",
+      "gain": 2.66628098487854
+    },
+    {
+      "feature": "away_gd5",
+      "gain": 2.6326591968536377
+    },
+    {
+      "feature": "home_win5",
+      "gain": 2.525609016418457
+    },
+    {
+      "feature": "home_att_elo",
+      "gain": 2.5241715908050537
+    },
+    {
+      "feature": "away_rest_days",
+      "gain": 2.5238020420074463
+    },
+    {
+      "feature": "tournament_weight",
+      "gain": 2.470810890197754
+    },
+    {
+      "feature": "h2h_home_gd",
+      "gain": 2.3717784881591797
+    }
+  ]
+}
