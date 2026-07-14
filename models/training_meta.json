@@ -53,109 +53,109 @@
   "metrics": [
     {
       "split": "train",
-      "accuracy": 0.6341658341658342,
-      "log_loss": 0.7966329455375671,
+      "accuracy": 0.623976023976024,
+      "log_loss": 0.808556079864502,
       "baseline_log_loss": 1.04073208906087,
-      "home_mae": 0.9573228359222412,
-      "away_mae": 0.7453488111495972
+      "home_mae": 0.9519820213317871,
+      "away_mae": 0.7772006988525391
     },
     {
       "split": "val",
-      "accuracy": 0.5809917355371901,
-      "log_loss": 0.9147314429283142,
-      "baseline_log_loss": 1.0503204955502945,
-      "home_mae": 1.0772747993469238,
-      "away_mae": 0.8686115145683289
+      "accuracy": 0.5830578512396695,
+      "log_loss": 0.9142836332321167,
+      "baseline_log_loss": 1.0503204955502947,
+      "home_mae": 1.0763942003250122,
+      "away_mae": 0.8647396564483643
     },
     {
       "split": "test",
-      "accuracy": 0.5761334473909324,
-      "log_loss": 0.9262492656707764,
-      "baseline_log_loss": 1.0560397877601593,
-      "home_mae": 1.075469970703125,
-      "away_mae": 0.8853758573532104
+      "accuracy": 0.573076923076923,
+      "log_loss": 0.9258766174316406,
+      "baseline_log_loss": 1.0559595801485933,
+      "home_mae": 1.0747976303100586,
+      "away_mae": 0.8862751126289368
     }
   ],
   "top_features": [
     {
       "feature": "att_vs_def_away",
-      "gain": 10.030365943908691
+      "gain": 10.436323165893555
     },
     {
       "feature": "att_vs_def_home",
-      "gain": 9.672070503234863
+      "gain": 10.176932334899902
     },
     {
       "feature": "away_gd10",
-      "gain": 5.1806960105896
+      "gain": 5.5581793785095215
     },
     {
       "feature": "home_gd10",
-      "gain": 4.614619731903076
+      "gain": 4.529047966003418
     },
     {
       "feature": "home_gd5",
-      "gain": 3.721348762512207
-    },
-    {
-      "feature": "neutral",
-      "gain": 3.6991641521453857
+      "gain": 3.952118158340454
     },
     {
       "feature": "away_win10",
-      "gain": 3.500209093093872
+      "gain": 3.9480433464050293
+    },
+    {
+      "feature": "neutral",
+      "gain": 3.751368522644043
     },
     {
       "feature": "away_att_elo",
-      "gain": 3.354037046432495
+      "gain": 3.356071949005127
     },
     {
       "feature": "home_ga5",
-      "gain": 3.037473201751709
-    },
-    {
-      "feature": "home_def_elo",
-      "gain": 2.932368278503418
-    },
-    {
-      "feature": "away_gf5",
-      "gain": 2.925283670425415
+      "gain": 3.2345924377441406
     },
     {
       "feature": "home_win10",
-      "gain": 2.910778522491455
+      "gain": 3.1353559494018555
+    },
+    {
+      "feature": "away_gf5",
+      "gain": 2.976681709289551
+    },
+    {
+      "feature": "home_def_elo",
+      "gain": 2.878300905227661
     },
     {
       "feature": "away_def_elo",
-      "gain": 2.842977523803711
+      "gain": 2.7975451946258545
     },
     {
       "feature": "away_ga5",
-      "gain": 2.66628098487854
-    },
-    {
-      "feature": "away_gd5",
-      "gain": 2.6326591968536377
-    },
-    {
-      "feature": "home_win5",
-      "gain": 2.525609016418457
+      "gain": 2.7642035484313965
     },
     {
       "feature": "home_att_elo",
-      "gain": 2.5241715908050537
-    },
-    {
-      "feature": "away_rest_days",
-      "gain": 2.5238020420074463
+      "gain": 2.6787517070770264
     },
     {
       "feature": "tournament_weight",
-      "gain": 2.470810890197754
+      "gain": 2.6716973781585693
     },
     {
-      "feature": "h2h_home_gd",
-      "gain": 2.3717784881591797
+      "feature": "away_rest_days",
+      "gain": 2.6374080181121826
+    },
+    {
+      "feature": "away_gd5",
+      "gain": 2.610325336456299
+    },
+    {
+      "feature": "home_win5",
+      "gain": 2.4914467334747314
+    },
+    {
+      "feature": "h2h_n",
+      "gain": 2.43955659866333
     }
   ]
 }
