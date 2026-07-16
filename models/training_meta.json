@@ -53,109 +53,109 @@
   "metrics": [
     {
       "split": "train",
-      "accuracy": 0.623976023976024,
-      "log_loss": 0.808556079864502,
+      "accuracy": 0.6223776223776224,
+      "log_loss": 0.8154721260070801,
       "baseline_log_loss": 1.04073208906087,
-      "home_mae": 0.9519820213317871,
-      "away_mae": 0.7772006988525391
+      "home_mae": 0.9520614147186279,
+      "away_mae": 0.7663903832435608
     },
     {
       "split": "val",
-      "accuracy": 0.5830578512396695,
-      "log_loss": 0.9142837524414062,
+      "accuracy": 0.5847107438016529,
+      "log_loss": 0.9116275310516357,
       "baseline_log_loss": 1.0503204955502947,
-      "home_mae": 1.0763942003250122,
-      "away_mae": 0.8647396564483643
+      "home_mae": 1.0809521675109863,
+      "away_mae": 0.8665546774864197
     },
     {
       "split": "test",
-      "accuracy": 0.5728321230243486,
-      "log_loss": 0.9259882569313049,
-      "baseline_log_loss": 1.0559983633961199,
-      "home_mae": 1.074971318244934,
-      "away_mae": 0.8862640261650085
+      "accuracy": 0.5730145175064048,
+      "log_loss": 0.9293109774589539,
+      "baseline_log_loss": 1.0560367220129754,
+      "home_mae": 1.0885905027389526,
+      "away_mae": 0.8914164304733276
     }
   ],
   "top_features": [
     {
       "feature": "att_vs_def_away",
-      "gain": 10.436323165893555
+      "gain": 11.065101623535156
     },
     {
       "feature": "att_vs_def_home",
-      "gain": 10.176932334899902
+      "gain": 9.941815376281738
     },
     {
       "feature": "away_gd10",
-      "gain": 5.5581793785095215
+      "gain": 5.662274360656738
+    },
+    {
+      "feature": "away_xg_for_avg5",
+      "gain": 4.852315902709961
     },
     {
       "feature": "home_gd10",
-      "gain": 4.529047966003418
+      "gain": 4.754770278930664
     },
     {
-      "feature": "home_gd5",
-      "gain": 3.952118158340454
+      "feature": "away_xg_for_avg10",
+      "gain": 4.67233419418335
     },
     {
       "feature": "away_win10",
-      "gain": 3.9480433464050293
+      "gain": 4.164645671844482
+    },
+    {
+      "feature": "home_gd5",
+      "gain": 4.087655544281006
     },
     {
       "feature": "neutral",
-      "gain": 3.751368522644043
+      "gain": 4.077583312988281
     },
     {
       "feature": "away_att_elo",
-      "gain": 3.356071949005127
-    },
-    {
-      "feature": "home_ga5",
-      "gain": 3.2345924377441406
-    },
-    {
-      "feature": "home_win10",
-      "gain": 3.1353559494018555
-    },
-    {
-      "feature": "away_gf5",
-      "gain": 2.976681709289551
+      "gain": 3.6712002754211426
     },
     {
       "feature": "home_def_elo",
-      "gain": 2.878300905227661
+      "gain": 3.1686339378356934
     },
     {
-      "feature": "away_def_elo",
-      "gain": 2.7975451946258545
+      "feature": "home_ga5",
+      "gain": 3.166290044784546
+    },
+    {
+      "feature": "away_xg_diff_5",
+      "gain": 3.139650583267212
+    },
+    {
+      "feature": "away_gf5",
+      "gain": 3.07499361038208
+    },
+    {
+      "feature": "home_win10",
+      "gain": 3.0014607906341553
+    },
+    {
+      "feature": "home_xg_diff_5",
+      "gain": 2.9857654571533203
     },
     {
       "feature": "away_ga5",
-      "gain": 2.7642035484313965
+      "gain": 2.95847225189209
     },
     {
-      "feature": "home_att_elo",
-      "gain": 2.6787517070770264
+      "feature": "away_def_elo",
+      "gain": 2.904059410095215
     },
     {
-      "feature": "tournament_weight",
-      "gain": 2.6716973781585693
-    },
-    {
-      "feature": "away_rest_days",
-      "gain": 2.6374080181121826
+      "feature": "away_xg_against_avg10",
+      "gain": 2.8886802196502686
     },
     {
       "feature": "away_gd5",
-      "gain": 2.610325336456299
-    },
-    {
-      "feature": "home_win5",
-      "gain": 2.4914467334747314
-    },
-    {
-      "feature": "h2h_n",
-      "gain": 2.43955659866333
+      "gain": 2.8810513019561768
     }
   ]
 }
