@@ -72,11 +72,13 @@ This re-downloads all upstream data (`international_results`, GitHub fixtures, x
 ### Understanding the output
 
 ```
->>> Predicted outcome: France (41.3%)
->>> Predicted outcome: Argentina (51.5%)
- fixture_id       date       round      home_team  away_team  p_home_win  p_draw  p_away_win  exp_home_goals  exp_away_goals      score1      score2      score3
-        101  2026-07-14  Semi-finals     France      Spain       0.4129   0.2684     0.3187            1.35            1.88  1-1 (10.9%)  1-2 (10.0%)  0-1 (8.8%)
-        102  2026-07-15  Semi-finals    England  Argentina    0.2620   0.2230     0.5151            1.20            1.45  1-1 (12.8%)  0-1 (11.2%)  1-2 (9.0%)
+>>> Predicted outcome: France (43.0%)
+>>> Predicted outcome: Argentina (40.1%)
+ fixture_id       date       round                home_team  away_team  p_home_win  p_draw  p_away_win  exp_home_goals  exp_away_goals      score1         score2         score3
+        101  2026-07-14  Semi-finals              France      Spain       0.4129   0.2684     0.3187            1.35            1.88  1-1 (10.9%)  1-2 (10.0%)  0-1 (8.8%)
+        102  2026-07-15  Semi-finals             England  Argentina    0.2620   0.2230     0.5151            1.20            1.45  1-1 (12.8%)  0-1 (11.2%)  1-2 (9.0%)
+        103  2026-07-18  Third Place Playoff      France     England     0.4303   0.2665     0.3032            1.45            1.10  1-1 (12.8%)  1-0 (12.3%)  0-0 (9.5%)
+        104  2026-07-19  Final                   Spain   Argentina      0.2945   0.3043     0.4011            1.27            2.00  1-1 (10.6%)  1-2 (10.3%)  0-1 (9.1%)
 ```
 
 **Columns:**

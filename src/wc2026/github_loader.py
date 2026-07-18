@@ -40,9 +40,9 @@ _STAGE_LABELS = {
     2: "Round of 16",
     3: "Quarter-finals",
     4: "Semi-finals",
-    5: "Semi-finals",      # upstream labels as 3rd place but schedule shows semi-finals
-    6: "Final",
-    7: "TBD",
+    5: "Semi-finals",
+    6: "Third Place Playoff",
+    7: "Final",
 }
 
 
