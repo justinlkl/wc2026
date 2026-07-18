@@ -23,6 +23,8 @@ models/*.joblib
 
 # IDE / OS
 .DS_Store
+.AppleDouble
+.LSOverride
 .idea/
 .vscode/
 *.swp

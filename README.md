@@ -226,6 +226,43 @@ The probability of "France winning" (41.3%) doesn't mean France scores more goal
 
 The most likely scoreline (1-1 at 10.9%) is actually a draw — France's win probability comes from winning the marginal distribution. This does not conflict with Spain having higher expected goals.
 
+## Semifinals — score predictions & winning % (from `outputs/wc2026_semifinal_predictions.csv`)
+
+Semifinal predictions use:
+
+- **Winning %** = `p_home_win` or `p_away_win` (draw excluded as its own probability bucket)
+- **Score predictions** = top exact scorelines from the Poisson scoreline matrix (`score1`–`score3`)
+
+### Predicted vs. actual (FT)
+
+> Actual results (from your provided match outcomes):
+> - Semi-final 101: **France 0–2 Spain**
+> - Semi-final 102: **England 1–2 Argentina**
+
+| Match | Predicted winning % | Predicted top scorelines | Actual FT | Winner correct? |
+|---|---:|---|---|---|
+| France vs Spain (101) | France **37.5%** / Spain **32.7%** (draw 29.8%) | 1-1 (11.7%), 2-1 (8.7%), 1-2 (8.3%) | **France 0–2 Spain** | **No** |
+| England vs Argentina (102) | Argentina **54.9%** / England **24.8%** (draw 20.3%) | 1-1 (13.2%), 0-1 (12.0%), 0-0 (10.2%) | **England 1–2 Argentina** | **Yes** |
+
+### Prediction accuracy summary (Semifinals)
+
+- **Winner (home/away) accuracy:** 1 / 2 = **50%**
+- **Most likely exact score hit?**
+  - France–Spain: predicted 1-1 (most likely) → actual 0-2 (**miss**)
+  - England–Argentina: predicted 1-1 (most likely) → actual 1-2 (**miss**)
+  - **Exact score (rank #1) accuracy:** 0 / 2 = **0%**
+
+### Forecast: remaining games (Third Place + Final)
+
+This repo’s main `wc2026_predictions.csv` already includes the same fields (`p_home_win`, `p_draw`, `p_away_win`, `score1–3`, `exp_home_goals`, `exp_away_goals`) for later rounds.
+
+- To forecast **Third Place** and **Final**, use the same “winning %” interpretation as above:
+  - home win % = `p_home_win`
+  - away win % = `p_away_win`
+  - most likely exact scores = `score1`–`score3`
+
+If you regenerate predictions after the semifinals, those remaining matches will appear with the same table-ready columns.
+
 ## Extending
 
 - Add more xG sources (xgclient, TheStatsAPI) in `xg_features.py`
